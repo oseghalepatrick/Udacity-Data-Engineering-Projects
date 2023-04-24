@@ -7,10 +7,9 @@ from sql_queries import quality_checks_queries
 def quality_checks(cur, conn):
     for query in quality_checks_queries:
         st = time.time()
-        print(f"Started copying {query.split()[-1][:-1]} !!!")
         cur.execute(query)
-        conn.commit()
-        print(f"Successfully copied data into {query.split()} table in {time.time()-st} seconds\n")
+        output = cur.fetchall()
+        print(f"{query.split()[-1][:-1]} table has {output[0][0]} records\n")
 
 
 def main():
@@ -19,7 +18,7 @@ def main():
 
     conn = psycopg2.connect("host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values()))
     cur = conn.cursor()
-    
+    print('\n')
     quality_checks(cur, conn)
 
     conn.close()

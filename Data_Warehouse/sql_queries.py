@@ -56,7 +56,7 @@ year INTEGER
 """)
 
 songplay_table_create = ("""
-CREATE TABLE IF NOT EXISTS songplay (
+CREATE TABLE IF NOT EXISTS songplays (
 songplay_id INTEGER IDENTITY(1,1) PRIMARY KEY, 
 start_time TIMESTAMP, 
 user_id INTEGER, 
@@ -137,8 +137,8 @@ FORMAT AS json 'auto' region 'us-west-2';
 # FINAL TABLES
 
 songplay_table_insert = ("""
-INSERT INTO songplay (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) 
-SELECT DISTINCT 
+INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) 
+SELECT
     TIMESTAMP 'epoch' + (se.ts / 1000) * INTERVAL '1 second' AS start_time,
     se.userId,
     se.level,
@@ -148,9 +148,9 @@ SELECT DISTINCT
     se.location,
     se.userAgent
 FROM staging_songs ss
-JOIN staging_events se
-    ON (se.artist=ss.artist_name AND se.song=ss.title)
-    AND se.page='NextSong';
+INNER JOIN staging_events se
+    ON (ss.title = se.song AND se.artist = ss.artist_name)
+    AND se.page = 'NextSong';
 """)
 
 user_table_insert = ("""
@@ -206,34 +206,34 @@ SELECT COUNT(1) FROM staging_songs;
 """)
 
 chech_staging_events = ("""
-SELECT COUNT(1) FROM staging_events;
+SELECT COUNT(*) FROM staging_events;
 """)
 
 chech_songs = ("""
-SELECT COUNT(1) FROM songs;
+SELECT COUNT(*) FROM songs;
 """)
 
 chech_songplay = ("""
-SELECT COUNT(1) FROM songplay;
+SELECT COUNT(*) FROM songplays;
 """)
 
 chech_artist = ("""
-SELECT COUNT(1) FROM artists;
+SELECT COUNT(*) FROM artists;
 """)
 
 chech_users = ("""
-SELECT COUNT(1) FROM user;
+SELECT COUNT(*) FROM users;
 """)
 
 chech_time = ("""
-SELECT COUNT(1) FROM time;
+SELECT COUNT(*) FROM time;
 """)
 
 # QUERY LISTS
 
 create_table_queries = [
-    staging_events_table_create,
-    staging_songs_table_create,
+    # staging_events_table_create,
+    # staging_songs_table_create,
     songplay_table_create,
     user_table_create,
     song_table_create,
@@ -242,8 +242,8 @@ create_table_queries = [
     ]
 
 drop_table_queries = [
-    staging_events_table_drop, 
-    staging_songs_table_drop, 
+    # staging_events_table_drop, 
+    # staging_songs_table_drop, 
     songplay_table_drop, 
     user_table_drop, 
     song_table_drop, 
@@ -265,5 +265,11 @@ insert_table_queries = [
     ]
 
 quality_checks_queries =[
-    chech_staging_songs, chech_staging_events, chech_songs, chech_songplay, chech_users, chech_artist, chech_time
+    chech_staging_songs, 
+    chech_staging_events, 
+    chech_songs, 
+    chech_songplay, 
+    chech_users, 
+    chech_artist, 
+    chech_time
 ]

@@ -65,7 +65,7 @@ DB_PASSWORD=''
 DB_PORT=5439
 
 [IAM_ROLE]
-ARN=<IAM Role arn>
+ARN=''
 
 [S3]
 LOG_DATA='s3://udacity-dend/log_data'
@@ -73,7 +73,7 @@ LOG_JSONPATH='s3://udacity-dend/log_json_path.json'
 SONG_DATA='s3://udacity-dend/song_data'
 
 ```
-
+## How to implement this project
 #### Create tables
 
     $ python create_tables.py
@@ -81,3 +81,11 @@ SONG_DATA='s3://udacity-dend/song_data'
 #### Load Data
 
     $ python etl.py
+
+#### Quality Checks
+Add a simple quality checks script to count the total records in each table
+
+    $ python quality_checks.py
+
+The output:
+![alt text](output.png)
