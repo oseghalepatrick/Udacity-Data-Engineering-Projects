@@ -88,4 +88,5 @@ Add a simple quality checks script to count the total records in each table
     $ python quality_checks.py
 
 The output:
+
 ![alt text](output.png)
