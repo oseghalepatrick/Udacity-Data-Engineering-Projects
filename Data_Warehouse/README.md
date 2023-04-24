@@ -29,7 +29,7 @@ Sample Data:
 ## Schema for Song Play Analysis
 
 #### Fact Table
-songplays - records in event data associated with song plays. Columns for the table:
+songplay - records in event data associated with song plays. Columns for the table:
 
     songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent
 
@@ -51,7 +51,7 @@ songplays - records in event data associated with song plays. Columns for the ta
 
 
 ## How to Run
-Create Redshift clusters and IAM role
+Create Redshift cluster and IAM role
 
 #### Setup Configurations 
 Setup the dwh.cfg file and fill in the cluster parameters below.

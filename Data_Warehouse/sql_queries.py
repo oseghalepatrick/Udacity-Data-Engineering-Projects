@@ -199,6 +199,35 @@ SELECT DISTINCT
     to_char(start_time, 'Day') AS weekday
 FROM staging_events;
 """)
+# QUALITY CHECKS
+
+chech_staging_songs = ("""
+SELECT COUNT(1) FROM staging_songs;
+""")
+
+chech_staging_events = ("""
+SELECT COUNT(1) FROM staging_events;
+""")
+
+chech_songs = ("""
+SELECT COUNT(1) FROM songs;
+""")
+
+chech_songplay = ("""
+SELECT COUNT(1) FROM songplay;
+""")
+
+chech_artist = ("""
+SELECT COUNT(1) FROM artists;
+""")
+
+chech_users = ("""
+SELECT COUNT(1) FROM user;
+""")
+
+chech_time = ("""
+SELECT COUNT(1) FROM time;
+""")
 
 # QUERY LISTS
 
@@ -234,3 +263,7 @@ insert_table_queries = [
     artist_table_insert, 
     time_table_insert
     ]
+
+quality_checks_queries =[
+    chech_staging_songs, chech_staging_events, chech_songs, chech_songplay, chech_users, chech_artist, chech_time
+]
