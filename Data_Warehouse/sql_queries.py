@@ -123,30 +123,30 @@ DISTKEY (start_time) SORTKEY (start_time);
 staging_events_copy = ("""
 COPY staging_events 
 FROM {} 
-credentials 'aws_iam_role={}'
+iam_role '{}'
 FORMAT AS json {} region 'us-west-2';
 """).format(config['S3']['LOG_DATA'], config['IAM_ROLE']['ARN'], config['S3']['LOG_JSONPATH'])
 
 staging_songs_copy = ("""
 COPY staging_songs 
 FROM {} 
-credentials 'aws_iam_role={}'  
+iam_role '{}'  
 FORMAT AS json 'auto' region 'us-west-2';
 """).format(config['S3']['SONG_DATA'], config['IAM_ROLE']['ARN'])
 
 # FINAL TABLES
 
 songplay_table_insert = ("""
-INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) 
+INSERT INTO songplay (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) 
 SELECT DISTINCT 
-    to_timestamp(se.ts) AS start_time,
+    TIMESTAMP 'epoch' + (se.ts / 1000) * INTERVAL '1 second' AS start_time,
     se.userId,
     se.level,
     ss.song_id,
     ss.artist_id,
-    se.session_id,
+    se.sessionId,
     se.location,
-    se.user_agent
+    se.userAgent
 FROM staging_songs ss
 JOIN staging_events se
     ON (se.artist=ss.artist_name AND se.song=ss.title)
@@ -156,9 +156,9 @@ JOIN staging_events se
 user_table_insert = ("""
 INSERT INTO users (user_id, first_name, last_name, gender, level) 
 SELECT DISTINCT 
-    userId,
-    firstname,
-    lastname,
+    userId as user_id,
+    firstname as first_name,
+    lastname as last_name,
     gender,
     level
 FROM staging_events
@@ -171,7 +171,8 @@ SELECT DISTINCT
     song_id,
     title,
     artist_id,
-    year
+    year,
+    duration
 FROM staging_songs;
 """)
 
@@ -179,17 +180,17 @@ artist_table_insert = ("""
 INSERT INTO artists (artist_id, name, location, lattitude, longitude) 
 SELECT DISTINCT 
     artist_id,
-    artist_name,
-    location,
-    latituse,
-    longitude
+    artist_name as name,
+    artist_location as location,
+    artist_latitude as lattitude,
+    artist_longitude as longitude
 FROM staging_songs;
 """)
 
 time_table_insert = ("""
 INSERT INTO time (start_time, hour, day, week, month, year, weekday) 
 SELECT DISTINCT
-    to_timestamp(se.ts) AS start_time,
+    TIMESTAMP 'epoch' + (ts / 1000) * INTERVAL '1 second' AS start_time,
     EXTRACT(HOUR FROM start_time) AS hour,
     EXTRACT(DAY FROM start_time) AS day,
     EXTRACT(WEEK FROM start_time) AS week,
