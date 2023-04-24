@@ -5,6 +5,16 @@ from sql_queries import quality_checks_queries
 
 
 def quality_checks(cur, conn):
+    """
+    This function execute queries that select from tables in a redshift database
+
+    Parameters:
+    cur (psycopg2.extensions.cursor): The cursor object to execute the query.
+    conn (psycopg2.extensions.connection): The connection object to use for the query.
+
+    Returns:
+    None
+    """
     for query in quality_checks_queries:
         st = time.time()
         cur.execute(query)
@@ -13,6 +23,9 @@ def quality_checks(cur, conn):
 
 
 def main():
+    """
+    This function call the quality checks function and create connection to the database
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 

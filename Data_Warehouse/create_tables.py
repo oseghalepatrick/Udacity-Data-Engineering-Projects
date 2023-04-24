@@ -5,6 +5,16 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    """
+    This function execute queries that drop tables in a redshift database
+
+    Parameters:
+    cur (psycopg2.extensions.cursor): The cursor object to execute the query.
+    conn (psycopg2.extensions.connection): The connection object to use for the query.
+
+    Returns:
+    None
+    """
     for query in drop_table_queries:
         cur.execute(query)
         print(f"Successfully dropped {query.split()[4]} table\n")
@@ -12,6 +22,16 @@ def drop_tables(cur, conn):
 
 
 def create_tables(cur, conn):
+    """
+    This function execute queries that create tables in a redshift database
+
+    Parameters:
+    cur (psycopg2.extensions.cursor): The cursor object to execute the query.
+    conn (psycopg2.extensions.connection): The connection object to use for the query.
+
+    Returns:
+    None
+    """
     for query in create_table_queries:
         cur.execute(query)
         print(f"Successfully created {query.split()[5]} table\n")
@@ -19,6 +39,9 @@ def create_tables(cur, conn):
 
 
 def main():
+    """
+    This function a connection to the redshift database and call the functions to drop and create tables
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
