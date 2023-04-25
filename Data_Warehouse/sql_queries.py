@@ -232,8 +232,8 @@ SELECT COUNT(*) FROM time;
 # QUERY LISTS
 
 create_table_queries = [
-    # staging_events_table_create,
-    # staging_songs_table_create,
+    staging_events_table_create,
+    staging_songs_table_create,
     songplay_table_create,
     user_table_create,
     song_table_create,
@@ -242,8 +242,8 @@ create_table_queries = [
     ]
 
 drop_table_queries = [
-    # staging_events_table_drop, 
-    # staging_songs_table_drop, 
+    staging_events_table_drop, 
+    staging_songs_table_drop, 
     songplay_table_drop, 
     user_table_drop, 
     song_table_drop, 
