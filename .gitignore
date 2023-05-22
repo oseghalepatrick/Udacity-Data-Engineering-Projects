@@ -1,3 +1,5 @@
 *.ipynb_checkpoints
 *.cfg
 *.pyc
+*.zip
+/stedi-human-balance-analytics
